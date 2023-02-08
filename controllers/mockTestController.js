@@ -44,7 +44,7 @@ module.exports = {
             return res.status(404).json({ message: 'Mock test not found' });
         }
         const deleteMockTest = await MockTest.findByIdAndDelete(id);
-        if(deleteMockTest){
+        if(!deleteMockTest){
             return res.status(400).json({ message: 'Unable to Delete Mock Test' });
         }
         res.json({ message: "Mock test deleted successfully" })
