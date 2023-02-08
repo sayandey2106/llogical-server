@@ -6,6 +6,7 @@ const authRoutes = require('./authRoutes');
 const testRoutes = require('./testRoutes');
 const courseRoutes = require('./courseRoutes');
 const demoClassRoutes = require('./demoClassRoute');
+const mockTestRoutes = require('./mockTestRoutes');
 const router = express.Router();
 
 router.use(healthCheckRoutes);
@@ -15,5 +16,6 @@ router.use(courseRoutes);
 router.use(manageUserRoutes);
 router.use(demoClassRoutes);
 router.use(userRoutes)
+router.use(mockTestRoutes)
 
 module.exports = router;

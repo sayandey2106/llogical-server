@@ -9,9 +9,9 @@ const { hash } = require("bcrypt");
 
 module.exports = {
     createNewDemoClass: async (req, res) => {
-        const { name, email, grade, date, time, school, board, address, mobileNo } = req.body;
+        const { name, email, grade, date, time, school, board, address, mobileNo,course } = req.body;
 
-        if (!name || !email || !grade || !date || !time || !school || !board || !address || !mobileNo) {
+        if (!name || !email || !grade || !date || !time || !school || !board || !address || !mobileNo || !course ) {
             logger.logActivity(loggerStatus.ERROR, req.body, ' name, email, grade , date, time, school, board, address, mobileNo are required!', null, OPERATIONS.DEMOCLASS.CREATE);
             res.status(400).json({ message: ' name, email, grade , date, time, school, board, address, mobileNo  are required!' });
             return;
@@ -28,7 +28,8 @@ module.exports = {
                 board: board,
                 address: address,
                 mobileNo: mobileNo,
-                isDeleted: false
+                isDeleted: false,
+                course : course
             });
 
             const savedDemo = await newDemo.save().catch((err) => {
@@ -71,6 +72,9 @@ module.exports = {
             return res.status(404).json({ message: 'demo class not found' });
         }
         const deleteDemoClass = await DemoClass.findByIdAndDelete(id);
+        if(!deleteDemoClass){
+            return res.status(400).json({message : "unable to delete demo class"})
+        }
         res.json({ message: "demo class deleted successfully" })
     },
     updateDemoClass: async (req, res) => {
@@ -82,7 +86,10 @@ module.exports = {
         if (!find) {
             return res.status(404).json({ message: 'demo class not found' });
         }
-        const deleteDemoClass = await DemoClass.findByIdAndUpdate(id, req.body);
+        const updateDemoClass = await DemoClass.findByIdAndUpdate(id, req.body);
+        if(!updateDemoClass){
+            return res.status(400).json({message : "unable to update demo class"})
+        }
         res.json({ message: "demo class updated successfully" })
     },
     getAllDemoClass: async (req, res) => {
@@ -102,5 +109,3 @@ module.exports = {
         res.json({ message: 'Demo Class Found', data: find })
     }
 }
-//get with id
-//get all
