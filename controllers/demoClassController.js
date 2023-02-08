@@ -68,7 +68,7 @@ module.exports = {
         }
         const find = await DemoClass.findOne({ _id: id });
         if (!find) {
-            return res.status(400).json({ message: 'demo class not found' });
+            return res.status(404).json({ message: 'demo class not found' });
         }
         const deleteDemoClass = await DemoClass.findByIdAndDelete(id);
         res.json({ message: "demo class deleted successfully" })
@@ -80,9 +80,27 @@ module.exports = {
         }
         const find = await DemoClass.findOne({ _id: id });
         if (!find) {
-            return res.status(400).json({ message: 'demo class not found' });
+            return res.status(404).json({ message: 'demo class not found' });
         }
         const deleteDemoClass = await DemoClass.findByIdAndUpdate(id, req.body);
         res.json({ message: "demo class updated successfully" })
     },
+    getAllDemoClass: async (req, res) => {
+        const find = await DemoClass.find({})
+        res.json({ message: 'demo classes Found', data: find })
+
+    },
+    getDemoClassById: async (req, res) => {
+        const id = req.params.id
+        if (!id) {
+            return res.status(400).json({ message: 'demo class id required!' });
+        }
+        const find = await DemoClass.findOne({ _id: id });
+        if (!find) {
+            return res.status(404).json({ message: 'demo class not found' });
+        }
+        res.json({ message: 'Demo Class Found', data: find })
+    }
 }
+//get with id
+//get all
