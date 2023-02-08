@@ -31,6 +31,13 @@ module.exports = {
             RETRIEVE: 'get all course',
             RETRIEVE_BY_ID: 'get course by id'
         },
+        DEMOCLASS: {
+            CREATE: 'create a course',
+            MODIFY: 'modify course info',
+            REMOVE: 'remove course info',
+            RETRIEVE: 'get all course',
+            RETRIEVE_BY_ID: 'get course by id'
+        },
     }
 
 };
