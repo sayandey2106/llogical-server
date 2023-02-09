@@ -9,9 +9,9 @@ const { hash } = require("bcrypt");
 
 module.exports = {
     createNewDemoClass: async (req, res) => {
-        const { name, email, grade, date, time, school, board, address, mobileNo,course } = req.body;
+        const { name, email, grade, date, time, school, board, address, mobileNo, course } = req.body;
 
-        if (!name || !email || !grade || !date || !time || !school || !board || !address || !mobileNo || !course ) {
+        if (!name || !email || !grade || !date || !time || !school || !board || !address || !mobileNo || !course) {
             logger.logActivity(loggerStatus.ERROR, req.body, ' name, email, grade , date, time, school, board, address, mobileNo are required!', null, OPERATIONS.DEMOCLASS.CREATE);
             res.status(400).json({ message: ' name, email, grade , date, time, school, board, address, mobileNo  are required!' });
             return;
@@ -29,7 +29,7 @@ module.exports = {
                 address: address,
                 mobileNo: mobileNo,
                 isDeleted: false,
-                course : course
+                course: course
             });
 
             const savedDemo = await newDemo.save().catch((err) => {
@@ -63,49 +63,69 @@ module.exports = {
         }
     },
     deleteDemoClass: async (req, res) => {
-        const id = req.params.id
-        if (!id) {
-            return res.status(400).json({ message: 'demo class id required!' });
+        try {
+            const id = req.params.id
+            if (!id) {
+                return res.status(400).json({ message: 'demo class id required!' });
+            }
+            const find = await DemoClass.findOne({ _id: id });
+            if (!find) {
+                return res.status(404).json({ message: 'demo class not found' });
+            }
+            const deleteDemoClass = await DemoClass.findByIdAndDelete(id);
+            if (!deleteDemoClass) {
+                return res.status(400).json({ message: "unable to delete demo class" })
+            }
+            res.json({ message: "demo class deleted successfully" })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({message : error.message})
         }
-        const find = await DemoClass.findOne({ _id: id });
-        if (!find) {
-            return res.status(404).json({ message: 'demo class not found' });
-        }
-        const deleteDemoClass = await DemoClass.findByIdAndDelete(id);
-        if(!deleteDemoClass){
-            return res.status(400).json({message : "unable to delete demo class"})
-        }
-        res.json({ message: "demo class deleted successfully" })
     },
     updateDemoClass: async (req, res) => {
-        const id = req.params.id
-        if (!id) {
-            return res.status(400).json({ message: 'demo class id required!' });
+        try {
+            const id = req.params.id
+            if (!id) {
+                return res.status(400).json({ message: 'demo class id required!' });
+            }
+            const find = await DemoClass.findOne({ _id: id });
+            if (!find) {
+                return res.status(404).json({ message: 'demo class not found' });
+            }
+            const updateDemoClass = await DemoClass.findByIdAndUpdate(id, req.body);
+            if (!updateDemoClass) {
+                return res.status(400).json({ message: "unable to update demo class" })
+            }
+            res.json({ message: "demo class updated successfully" })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({message : error.message})
         }
-        const find = await DemoClass.findOne({ _id: id });
-        if (!find) {
-            return res.status(404).json({ message: 'demo class not found' });
-        }
-        const updateDemoClass = await DemoClass.findByIdAndUpdate(id, req.body);
-        if(!updateDemoClass){
-            return res.status(400).json({message : "unable to update demo class"})
-        }
-        res.json({ message: "demo class updated successfully" })
     },
     getAllDemoClass: async (req, res) => {
-        const find = await DemoClass.find({})
-        res.json({ message: 'demo classes Found', data: find })
+        try {
+            const find = await DemoClass.find(req.query)
+            res.json({ message: 'demo classes Found', data: find })
+        } catch (error) {
+            console.log(error)
+             return res.status(500).json({message : error.message})
+        }
 
     },
     getDemoClassById: async (req, res) => {
-        const id = req.params.id
-        if (!id) {
-            return res.status(400).json({ message: 'demo class id required!' });
+        try {
+            const id = req.params.id
+            if (!id) {
+                return res.status(400).json({ message: 'demo class id required!' });
+            }
+            const find = await DemoClass.findOne({ _id: id });
+            if (!find) {
+                return res.status(404).json({ message: 'demo class not found' });
+            }
+            res.json({ message: 'Demo Class Found', data: find })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({message : error.message})
         }
-        const find = await DemoClass.findOne({ _id: id });
-        if (!find) {
-            return res.status(404).json({ message: 'demo class not found' });
-        }
-        res.json({ message: 'Demo Class Found', data: find })
     }
 }

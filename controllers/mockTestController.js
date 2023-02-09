@@ -32,24 +32,31 @@ module.exports = {
             });
         } catch (error) {
             console.log(error)
+            return res.status(500).json({message : error.message})
         }
     },
     deleteMockTest: async (req, res) => {
-        const id = req.params.id
-        if (!id) {
-            return res.status(400).json({ message: 'Mock test id required!' });
+        try {
+            const id = req.params.id
+            if (!id) {
+                return res.status(400).json({ message: 'Mock test id required!' });
+            }
+            const find = await MockTest.findOne({ _id: id });
+            if (!find) {
+                return res.status(404).json({ message: 'Mock test not found' });
+            }
+            const deleteMockTest = await MockTest.findByIdAndDelete(id);
+            if (!deleteMockTest) {
+                return res.status(400).json({ message: 'Unable to Delete Mock Test' });
+            }
+            res.json({ message: "Mock test deleted successfully" })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({message : error.message})
         }
-        const find = await MockTest.findOne({ _id: id });
-        if (!find) {
-            return res.status(404).json({ message: 'Mock test not found' });
-        }
-        const deleteMockTest = await MockTest.findByIdAndDelete(id);
-        if(!deleteMockTest){
-            return res.status(400).json({ message: 'Unable to Delete Mock Test' });
-        }
-        res.json({ message: "Mock test deleted successfully" })
     },
     updateMockTest: async (req, res) => {
+      try {
         const id = req.params.id
         if (!id) {
             return res.status(400).json({ message: 'Mock test id required!' });
@@ -59,17 +66,27 @@ module.exports = {
             return res.status(404).json({ message: 'Mock test not found' });
         }
         const updateMockTest = await MockTest.findByIdAndUpdate(id, req.body);
-        if(!updateMockTest){
+        if (!updateMockTest) {
             return res.status(400).json({ message: 'Unable to Update Mock Test' });
         }
-        res.json({ message: "Mock Test updated successfully" })
+        res.json({ message: "Mock Test updated successfully" })  
+      } catch (error) {
+          console.log(error)
+          return res.status(500).json({message : error.message})
+      }
     },
     getAllMockTest: async (req, res) => {
-        const find = await MockTest.find({})
+      try {
+        const find = await MockTest.find(req.query)
         res.json({ message: 'Mock Test Found', data: find })
+      } catch (error) {
+          console.log(error)
+          return res.status(500).json({message : error.message})
+      }
 
     },
     getMockTestById: async (req, res) => {
+      try {
         const id = req.params.id
         if (!id) {
             return res.status(400).json({ message: 'Mock test id required!' });
@@ -79,5 +96,9 @@ module.exports = {
             return res.status(404).json({ message: 'Mock test not found' });
         }
         res.json({ message: 'Mock Test Found', data: find })
+      } catch (error) {
+          console.log(error)
+          return res.status(500).json({message : error.message})
+      }
     }
 }
