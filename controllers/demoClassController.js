@@ -9,16 +9,15 @@ const { hash } = require("bcrypt");
 
 module.exports = {
     createNewDemoClass: async (req, res) => {
-        const { name, email, grade, date, time, school, board, address, mobileNo} = req.body;
+        const { name, email, grade, date, time, school, board, address, mobileNo } = req.body;
 
-        if (!name || !email || !grade || !date || !time || !school || !board || !address || !mobileNo ) {
+        if (!name || !email || !grade || !date || !time || !school || !board || !address || !mobileNo) {
             logger.logActivity(loggerStatus.ERROR, req.body, ' name, email, grade , date, time, school, board, address, mobileNo are required!', null, OPERATIONS.DEMOCLASS.CREATE);
             res.status(400).json({ message: ' name, email, grade , date, time, school, board, address, mobileNo  are required!' });
             return;
         }
-
         try {
-            const newDemo = new DemoClass({
+            const newDemo = await new DemoClass({
                 name: name,
                 email: email,
                 grade: grade,
@@ -29,9 +28,7 @@ module.exports = {
                 address: address,
                 mobileNo: mobileNo,
                 isDeleted: false,
-                course: course
             });
-
             const savedDemo = await newDemo.save().catch((err) => {
                 logger.logActivity(loggerStatus.ERROR, req.body, 'Cannot create the demo class at the moment!', err, OPERATIONS.DEMOCLASS.CREATE);
                 res.status(500).json({ error: 'Cannot create the demo class at the moment!' });
@@ -47,11 +44,6 @@ module.exports = {
                     name: savedDemo.name,
                     variable: variable
                 }
-
-
-
-
-
 
                 res.json({
                     message: 'Demo class Creation Successful!!',
@@ -79,7 +71,7 @@ module.exports = {
             res.json({ message: "demo class deleted successfully" })
         } catch (error) {
             console.log(error)
-            return res.status(500).json({message : error.message})
+            return res.status(500).json({ message: error.message })
         }
     },
     updateDemoClass: async (req, res) => {
@@ -99,7 +91,7 @@ module.exports = {
             res.json({ message: "demo class updated successfully" })
         } catch (error) {
             console.log(error)
-            return res.status(500).json({message : error.message})
+            return res.status(500).json({ message: error.message })
         }
     },
     getAllDemoClass: async (req, res) => {
@@ -108,7 +100,7 @@ module.exports = {
             res.json({ message: 'demo classes Found', data: find })
         } catch (error) {
             console.log(error)
-             return res.status(500).json({message : error.message})
+            return res.status(500).json({ message: error.message })
         }
 
     },
@@ -125,7 +117,7 @@ module.exports = {
             res.json({ message: 'Demo Class Found', data: find })
         } catch (error) {
             console.log(error)
-            return res.status(500).json({message : error.message})
+            return res.status(500).json({ message: error.message })
         }
     }
 }
