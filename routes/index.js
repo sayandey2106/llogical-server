@@ -8,6 +8,7 @@ const courseRoutes = require('./courseRoutes');
 const demoClassRoutes = require('./demoClassRoute');
 const mockTestRoutes = require('./mockTestRoutes');
 const ContactRoutes = require('./contactRoutes')
+const zoomRoutes = require('./zoomRoute')
 const router = express.Router();
 
 router.use(healthCheckRoutes);
@@ -19,5 +20,6 @@ router.use(demoClassRoutes);
 router.use(userRoutes)
 router.use(mockTestRoutes)
 router.use(ContactRoutes)
+router.use(zoomRoutes);
 
 module.exports = router;

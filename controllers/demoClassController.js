@@ -9,9 +9,9 @@ const { hash } = require("bcrypt");
 
 module.exports = {
     createNewDemoClass: async (req, res) => {
-        const { name, email, grade, date, time, school, board, address, mobileNo, course } = req.body;
+        const { name, email, grade, date, time, school, board, address, mobileNo} = req.body;
 
-        if (!name || !email || !grade || !date || !time || !school || !board || !address || !mobileNo || !course) {
+        if (!name || !email || !grade || !date || !time || !school || !board || !address || !mobileNo ) {
             logger.logActivity(loggerStatus.ERROR, req.body, ' name, email, grade , date, time, school, board, address, mobileNo are required!', null, OPERATIONS.DEMOCLASS.CREATE);
             res.status(400).json({ message: ' name, email, grade , date, time, school, board, address, mobileNo  are required!' });
             return;

@@ -5,10 +5,6 @@ const DemoClass = new mongoose.Schema({
     type: String,
     allowNull: false,
   },
-  course : {
-    type: String,
-    allowNull: false,
-  },
   email: {
     type: String,
     allowNull: false,
